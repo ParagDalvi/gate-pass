@@ -1,92 +1,116 @@
 import React, { Component } from 'react';
 import { Accordion, Card } from 'react-bootstrap';
 
-function ItemsList() {
-    return (
-        <div className="container">
-            <br></br>
-            <br></br>
-            <SingleItem />
-            <SingleItem />
-            <SingleItem />
-        </div>
-    );
+function ItemsList({ issues, loading }) {
+
+
+    if (issues) {
+        const items = issues.map((issue) => {
+            return (
+                <div key={issue.passNo}>
+                    <SingleItem data={issue.data()} />
+                </div>
+            );
+        });
+        return (
+            <div className="container">
+                <div className="row">
+                    <div className="btn ml-auto">
+                        <button>Add new</button>
+                    </div>
+                </div>
+                {items}
+            </div>
+        );
+    }
+
+    return <p>loading</p>
 }
 
 export default ItemsList;
 
 
 
-function SingleItem() {
+function SingleItem({ data }) {
+
     return (
         <Accordion>
             <Card>
                 <Accordion.Toggle as={Card.Header} eventKey="0" className="pointer-card">
-                    <p><small>Pass </small><strong>124, Parag Dalvi</strong></p>
+                    <p><small>Pass </small><strong>{data.passNo}, {data.name}</strong></p>
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey="0">
                     <Card.Body>
-                        <p>Gate pass number: <strong>124</strong></p>
+                        <p>Gate pass number: <strong>{data.passNo}</strong></p>
                         <hr></hr>
                         <h5>Issued to</h5>
                         <div className="row">
                             <div className="col-md-4 col-12">
                                 <small className="font-italic">Name</small>
-                                <p>Parag Dalvi</p>
+                                <p>{data.name}</p>
                             </div>
                             <div className="col-md-4 col-12">
                                 <small className="font-italic">Contact</small>
-                                <p>9916715009</p>
+                                <p>{data.contact}</p>
                             </div>
                             <div className="col-md-4 col-12">
                                 <small className="font-italic">Address</small>
-                                <p>CCB 13 new goods shed road</p>
+                                <p>{data.address}</p>
                             </div>
                         </div>
                         <hr></hr>
                         <h5>Products</h5>
-                        <Product />
-                        <Product />
-                        <Product />
+                        <table className="table table-sm table-dark">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Issue Date</th>
+                                    <th scope="col">Return Date</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {data.products.map((product) => {
+                                    return (
+                                        <tr>
+                                            <th scope="row">{product.id}</th>
+                                            <td>{product.description}</td>
+                                            <td>{product.date}</td>
+                                            <td>{product.returnDate}</td>
+                                            <td>{product.qty}</td>
+                                            {product.returnable ? <td>Returnable</td> : <td>Non-Returnable</td>}
+
+                                        </tr>
+                                    )
+                                })}
+                            </tbody>
+                        </table>
+                        <hr></hr>
+                        <h5>Authorization</h5>
+                        <div className="row">
+                            <div className="col-md-3 col-12">
+                                <small className="font-italic">Requested By</small>
+                                <p>{data.requestedBy}</p>
+                            </div>
+                            <div className="col-md-3 col-12">
+                                <small className="font-italic">Cordinated By</small>
+                                <p>{data.cordinatedBy}</p>
+                            </div>
+                            <div className="col-md-3 col-12">
+                                <small className="font-italic">Carried By</small>
+                                <p>{data.carriedBy}</p>
+                            </div>
+                            <div className="col-md-3 col-12">
+                                <small className="font-italic">Verified By</small>
+                                <p>{data.verifiedBy}</p>
+                            </div>
+                        </div>
                     </Card.Body>
                 </Accordion.Collapse>
             </Card>
             <br></br>
         </Accordion>
-    );
-}
-
-function Product() {
-    return (
-        <div>
-
-            <div className="row">
-                <div className="col-md-2 col-12">
-                    <small className="font-italic">ID</small>
-                    <p>21745128</p>
-                </div>
-                <div className="col-md-2 col-12">
-                    <small className="font-italic">Expected return date</small>
-                    <p>20/2/2022</p>
-                </div>
-                <div className="col-md-2 col-12">
-                    <small className="font-italic">Requested by</small>
-                    <p>Someone Else</p>
-                </div>
-                <div className="col-md-2 col-12">
-                    <small className="font-italic">Cordinated by</small>
-                    <p>Different Person</p>
-                </div>
-                <div className="col-md-2 col-12">
-                    <small className="font-italic">Carried by</small>
-                    <p>Some Other</p>
-                </div>
-                <div className="col-md-2 col-12">
-                    <small className="font-italic">Verified by</small>
-                    <p>He</p>
-                </div>
-            </div>
-            <hr className="my-2"></hr>
-        </div>
     );
 }

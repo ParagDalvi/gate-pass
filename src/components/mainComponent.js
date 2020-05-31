@@ -9,7 +9,7 @@ export default class Main extends Component {
 
         this.state = {
             isLoading: true,
-            issues: null,
+            issues: [],
         }
 
 
@@ -17,16 +17,16 @@ export default class Main extends Component {
 
     async componentDidMount() {
         const db = firebase.firestore();
-        db.collection('issues').onSnapshot(
-            (querySnapshot) => {
-                this.setState({
-                    issues: querySnapshot.docs,
-                });
-            },
-            (error) => {
-                console.log('custom', error.message);
+        // db.collection('issues').onSnapshot(
+        //     (querySnapshot) => {
+        //         this.setState({
+        //             issues: querySnapshot.docs,
+        //         });
+        //     },
+        //     (error) => {
+        //         console.log('custom', error.message);
 
-            });
+        //     });
         this.setState({
             isLoading: false,
         });

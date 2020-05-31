@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Accordion, Card } from 'react-bootstrap';
+import AddNewButton from './buttons/AddNewButton';
 
 function ItemsList({ issues, loading }) {
-
-
     if (issues) {
         const items = issues.map((issue) => {
             return (
@@ -14,11 +13,13 @@ function ItemsList({ issues, loading }) {
         });
         return (
             <div className="container">
+                <br></br>
                 <div className="row">
-                    <div className="btn ml-auto">
-                        <button>Add new</button>
+                    <div className="ml-auto">
+                        <AddNewButton />
                     </div>
                 </div>
+                <br></br>
                 {items}
             </div>
         );

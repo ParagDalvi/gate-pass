@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import { Button, Modal } from 'react-bootstrap';
+import firebase from '../../firebase/firebase'
 
+
+const dateObj = new Date();
+const minDateForForm = dateObj.getFullYear() + '-' + String(dateObj.getMonth() + 1).padStart(2, '0') + '-' + String(dateObj.getDate()).padStart(2, '0');
 
 const productMap = {
     id: '',
     description: '',
-    returnDate: '',
-    qty: '',
+    returnDate: minDateForForm,
+    qty: '1',
     type: 'Returnable',
     idError: '',
     descriptionError: '',
 };
-
-const dateObj = new Date();
-const minDateForForm = dateObj.getFullYear() + '-' + String(dateObj.getMonth() + 1).padStart(2, '0') + '-' + String(dateObj.getDate()).padStart(2, '0');
-console.log(minDateForForm);
 
 export default class AddNewButton extends Component {
     constructor(props) {
@@ -39,7 +39,6 @@ export default class AddNewButton extends Component {
             products: [
                 productMap,
             ],
-
         };
 
         this.toggleModal = this.toggleModal.bind(this);
@@ -57,7 +56,6 @@ export default class AddNewButton extends Component {
     }
 
     handleChange(event) {
-        console.log(event.target.value);
 
         if (event.target.name === 'contact') {
             const re = /^[0-9\b]+$/;
@@ -149,9 +147,73 @@ export default class AddNewButton extends Component {
     }
 
     handleSubmit(event) {
+        event.preventDefault();
         if (this.validateInput()) {
             //push to cloud
-            console.log('cueess');
+
+            const productToUpload = this.state.products.map((product) => {
+                console.log('type is', product.type);
+                if (product.type === 'Returnable') {
+                    return {
+                        id: product.id,
+                        description: product.description,
+                        returnDate: product.returnDate,
+                        qty: product.qty,
+                        type: 'Returnable',
+                        status: false,
+                        date: minDateForForm.split("").reverse().join(""),
+                    };
+                } else {
+                    return {
+                        id: product.id,
+                        description: product.description,
+                        returnDate: product.returnDate,
+                        qty: product.qty,
+                        type: 'Non-Returnable',
+                        date: minDateForForm.split("").reverse().join(""),
+                    };
+                }
+            });
+            const db = firebase.firestore();
+            db.collection('issues').add({
+                passNo: 12,
+                name: this.state.name,
+                contact: this.state.contact,
+                address: this.state.address,
+                products: productToUpload,
+                verifiedBy: this.state.verifiedBy,
+                requestedBy: this.state.requestedBy,
+                cordinatedBy: this.state.cordinatedBy,
+                carriedBy: this.state.carriedBy
+            })
+                .then(function () {
+                    console.log("Document successfully written!");
+                })
+                .catch(function (error) {
+                    console.error("Error writing document: ", error);
+                });
+            this.toggleModal();
+            this.setState({
+                isModelOpen: false,
+                name: '',
+                contact: '',
+                address: '',
+                requestedBy: '',
+                cordinatedBy: '',
+                carriedBy: '',
+                verifiedBy: '',
+                nameError: '',
+                contactError: '',
+                addressError: '',
+                requestedByError: '',
+                cordinatedByError: '',
+                carriedByError: '',
+                verifiedByError: '',
+                products: [
+                    productMap,
+                ],
+            });
+            console.log('after submitting state is ', this.state);
 
         }
     }
@@ -298,7 +360,8 @@ export default class AddNewButton extends Component {
                                 <div className="col-md-6 col-12">
                                     <div className="form-group">
                                         <label htmlFor="name">Name</label>
-                                        <input type="text" name="name" id="name" onChange={this.handleChange}
+                                        <input type="text" name="name" id="name"
+                                            value={this.state.name} onChange={this.handleChange}
                                             className='form-control' placeholder='Name'></input>
                                         <small className="text-danger">{this.state.nameError}</small>
                                     </div>
@@ -307,6 +370,7 @@ export default class AddNewButton extends Component {
                                     <div className="form-group">
                                         <label htmlFor="contact">Contact</label>
                                         <input type="tel" name="contact" id="contact" onChange={this.handleChange}
+                                            value={this.state.contact}
                                             className='form-control' value={this.state.contact} placeholder='Contact number'></input>
                                         <small className="text-danger">{this.state.contactError}</small>
                                     </div>
@@ -317,6 +381,7 @@ export default class AddNewButton extends Component {
                                     <div className="form-group">
                                         <label htmlFor="address">Address</label>
                                         <textarea className='form-control' rows='3' id='address'
+                                            value={this.state.address}
                                             onChange={this.handleChange} name='address'></textarea>
                                     </div>
                                 </div>
@@ -361,14 +426,14 @@ export default class AddNewButton extends Component {
                                                 <td>
                                                     <input class="form-control align-middle"
                                                         name={"returnDate" + index} id={"returnDate" + index}
-                                                        onChange={this.handleChange}
+                                                        onChange={this.handleChange} value={product.returnDate}
                                                         type="date" min={minDateForForm}>
                                                     </input>
                                                 </td>
                                                 <td>
                                                     <input class="form-control align-middle"
                                                         name={"qty" + index} id={"qty" + index}
-                                                        onChange={this.handleChange}
+                                                        onChange={this.handleChange} value={product.qty}
                                                         type="number" min="1">
                                                     </input>
                                                 </td>
@@ -397,7 +462,8 @@ export default class AddNewButton extends Component {
                                 <div className="col-md-3 col-6">
                                     <div className="form-group">
                                         <label htmlFor="requestedBy">Requested By</label>
-                                        <input type="text" name="requestedBy" id="requestedBy" onChange={this.handleChange}
+                                        <input type="text" name="requestedBy" id="requestedBy"
+                                            onChange={this.handleChange} value={this.state.requestedBy}
                                             className='form-control' placeholder='Requested By'></input>
                                         <small className="text-danger">{this.state.requestedByError}</small>
                                     </div>
@@ -405,7 +471,8 @@ export default class AddNewButton extends Component {
                                 <div className="col-md-3 col-6">
                                     <div className="form-group">
                                         <label htmlFor="cordinatedBy">Cordinated By</label>
-                                        <input type="text" name="cordinatedBy" id="cordinatedBy" onChange={this.handleChange}
+                                        <input type="text" name="cordinatedBy" id="cordinatedBy"
+                                            onChange={this.handleChange} value={this.state.cordinatedBy}
                                             className='form-control' placeholder='Cordinated By'></input>
                                         <small className="text-danger">{this.state.cordinatedByError}</small>
                                     </div>
@@ -413,7 +480,8 @@ export default class AddNewButton extends Component {
                                 <div className="col-md-3 col-6">
                                     <div className="form-group">
                                         <label htmlFor="carriedBy">Carried By</label>
-                                        <input type="text" name="carriedBy" id="carriedBy" onChange={this.handleChange}
+                                        <input type="text" name="carriedBy" id="carriedBy"
+                                            onChange={this.handleChange} value={this.state.carriedBy}
                                             className='form-control' placeholder='Carried By'></input>
                                         <small className="text-danger">{this.state.carriedByError}</small>
                                     </div>
@@ -421,7 +489,8 @@ export default class AddNewButton extends Component {
                                 <div className="col-md-3 col-6">
                                     <div className="form-group">
                                         <label htmlFor="verifiedBy">Verified By</label>
-                                        <input type="text" name="verifiedBy" id="verifiedBy" onChange={this.handleChange}
+                                        <input type="text" name="verifiedBy" id="verifiedBy"
+                                            onChange={this.handleChange} value={this.state.verifiedBy}
                                             className='form-control' placeholder='Verified By'></input>
                                         <small className="text-danger">{this.state.verifiedByError}</small>
                                     </div>

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Accordion, Card } from 'react-bootstrap';
-import AddNewButton from './buttons/AddNewButton';
 
 function ItemsList({ issues, loading }) {
     if (issues) {
@@ -13,12 +12,6 @@ function ItemsList({ issues, loading }) {
         });
         return (
             <div className="container">
-                <br></br>
-                <div className="row">
-                    <div className="ml-auto">
-                        <AddNewButton />
-                    </div>
-                </div>
                 <br></br>
                 {items}
             </div>
@@ -70,6 +63,7 @@ function SingleItem({ data }) {
                                     <th scope="col">Return Date</th>
                                     <th scope="col">Quantity</th>
                                     <th scope="col">Type</th>
+                                    <th scope="col">Returned</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -81,8 +75,8 @@ function SingleItem({ data }) {
                                             <td>{product.date}</td>
                                             <td>{product.returnDate}</td>
                                             <td>{product.qty}</td>
-                                            {product.returnable ? <td>Returnable</td> : <td>Non-Returnable</td>}
-
+                                            <td>{product.type}</td>
+                                            {product.status ? <span className="fa fa-check"></span> : <span className="fa fa-times"></span>}
                                         </tr>
                                     )
                                 })}

@@ -5,6 +5,7 @@ import firebase from '../firebase/firebase';
 import AddNewButton from './buttons/AddNewButton';
 import ExportButton from './buttons/ExportComponent';
 
+
 export default class Main extends Component {
     constructor(props) {
         super(props);
@@ -43,7 +44,7 @@ export default class Main extends Component {
                     <div className="row">
                         <div className="ml-auto">
                             <ExportButton issues={this.state.issues} />
-                            <AddNewButton />
+                            <AddNewButton passNo={this.state.issues} />
                         </div>
                     </div>
                     <ItemsList issues={this.state.issues} loading={this.state.isLoading} />

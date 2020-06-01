@@ -16,6 +16,8 @@ const productMap = {
     descriptionError: '',
 };
 
+let passNo;
+
 export default class AddNewButton extends Component {
     constructor(props) {
         super(props);
@@ -47,6 +49,11 @@ export default class AddNewButton extends Component {
         this.validateInput = this.validateInput.bind(this);
         this.addProduct = this.addProduct.bind(this);
         this.removeProduct = this.removeProduct.bind(this);
+    }
+
+    componentDidMount() {
+        console.log('itha',this.props.issues);
+        
     }
 
     toggleModal() {

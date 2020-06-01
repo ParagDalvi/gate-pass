@@ -23,6 +23,7 @@ export default class AddNewButton extends Component {
         super(props);
 
         this.state = {
+            passNo: null,
             isModelOpen: false,
             name: '',
             contact: '',
@@ -52,8 +53,12 @@ export default class AddNewButton extends Component {
     }
 
     componentDidMount() {
-        console.log('itha',this.props.issues);
-        
+        if (this.props.issues.length > 0) {
+            passNo = this.props.issues[0].data().passNo + 1;
+
+        } else {
+            passNo = 1;
+        }
     }
 
     toggleModal() {
@@ -183,7 +188,7 @@ export default class AddNewButton extends Component {
             });
             const db = firebase.firestore();
             db.collection('issues').add({
-                passNo: 12,
+                passNo: passNo,
                 name: this.state.name,
                 contact: this.state.contact,
                 address: this.state.address,
@@ -220,6 +225,7 @@ export default class AddNewButton extends Component {
                     productMap,
                 ],
             });
+            passNo++;
             console.log('after submitting state is ', this.state);
 
         }
@@ -361,7 +367,7 @@ export default class AddNewButton extends Component {
                             <Modal.Title>New Gate Pass</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <p>Gate Pass Number <strong>178</strong></p>
+                            <p>Gate Pass Number <strong>{passNo}</strong></p>
                             <h5>Personal Details</h5>
                             <div className="row mt-2">
                                 <div className="col-md-6 col-12">

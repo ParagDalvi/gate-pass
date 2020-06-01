@@ -12,43 +12,42 @@ export default class Main extends Component {
 
         this.state = {
             isLoading: true,
-            issues: [],
+            issues: null,
         }
-
-
     }
 
     async componentDidMount() {
         const db = firebase.firestore();
-        db.collection('issues').onSnapshot(
+        db.collection('issues').orderBy('passNo', 'desc').onSnapshot(
             (querySnapshot) => {
                 this.setState({
                     issues: querySnapshot.docs,
+                    isLoading: false,
                 });
             },
             (error) => {
                 console.log('custom', error.message);
-
             });
-        this.setState({
-            isLoading: false,
-        });
     }
 
     render() {
         return (
             <div>
                 <Navbar />
-                <div className="container">
-                    <br></br>
-                    <div className="row">
-                        <div className="ml-auto">
-                            <ExportButton issues={this.state.issues} />
-                            <AddNewButton passNo={this.state.issues} />
+                {
+                    this.state.issues
+                        ? <div className="container">
+                            <br></br>
+                            <div className="row">
+                                <div className="ml-auto">
+                                    <ExportButton issues={this.state.issues} />
+                                    <AddNewButton issues={this.state.issues} />
+                                </div>
+                            </div>
+                            <ItemsList issues={this.state.issues} loading={this.state.isLoading} />
                         </div>
-                    </div>
-                    <ItemsList issues={this.state.issues} loading={this.state.isLoading} />
-                </div>
+                        : <p>Loading..</p>
+                }
             </div>
         );
     }

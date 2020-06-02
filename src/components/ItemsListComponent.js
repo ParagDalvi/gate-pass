@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Accordion, Card } from 'react-bootstrap';
+import EditComponent from './buttons/EditComponent';
 
 function ItemsList({ issues, loading }) {
     if (issues) {
@@ -31,7 +32,12 @@ function SingleItem({ data }) {
         <Accordion>
             <Card>
                 <Accordion.Toggle as={Card.Header} eventKey="0" className="pointer-card">
-                    <p><small>Pass </small><strong>{data.passNo}, {data.name}</strong></p>
+                    <div className="row">
+                        <p><small>Pass </small><strong>{data.passNo}, {data.name}</strong></p>
+                        <div className="ml-auto">
+                            <EditComponent data={data}/>
+                        </div>
+                    </div>
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey="0">
                     <Card.Body>

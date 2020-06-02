@@ -2,72 +2,60 @@ import React, { Component } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import firebase from '../../firebase/firebase'
 
-
-const dateObj = new Date();
-const minDateForForm = dateObj.getFullYear() + '-' + String(dateObj.getMonth() + 1).padStart(2, '0') + '-' + String(dateObj.getDate()).padStart(2, '0');
-
-const productMap = {
-    id: '',
-    description: '',
-    returnDate: minDateForForm,
-    qty: '1',
-    type: 'Returnable',
-    idError: '',
-    descriptionError: '',
-};
-
-let passNo;
-
 export default class AddNewButton extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            passNo: null,
+            passNo: this.props.data.passNo,
             isModelOpen: false,
-            name: '',
-            contact: '',
-            address: '',
-            requestedBy: '',
-            cordinatedBy: '',
-            carriedBy: '',
-            verifiedBy: '',
-            nameError: '',
-            contactError: '',
-            addressError: '',
-            requestedByError: '',
-            cordinatedByError: '',
-            carriedByError: '',
-            verifiedByError: '',
-            products: [
-                productMap,
-            ],
+            name: this.props.data.name,
+            contact: this.props.data.contact,
+            address: this.props.data.address,
+            requestedBy: this.props.data.requestedBy,
+            cordinatedBy: this.props.data.cordinatedBy,
+            carriedBy: this.props.data.carriedBy,
+            verifiedBy: this.props.data.verifiedBy,
+            nameError: this.props.data.nameError,
+            contactError: this.props.data.contactError,
+            addressError: this.props.data.addressError,
+            requestedByError: this.props.data.requestedByError,
+            cordinatedByError: this.props.data.cordinatedByError,
+            carriedByError: this.props.data.carriedByError,
+            verifiedByError: this.props.data.verifiedByError,
+            products: this.props.data.products,
         };
 
         this.toggleModal = this.toggleModal.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.validateInput = this.validateInput.bind(this);
-        this.addProduct = this.addProduct.bind(this);
-        this.removeProduct = this.removeProduct.bind(this);
-    }
-
-    componentDidMount() {
-        if (this.props.issues.length > 0) {
-            passNo = this.props.issues[0].data().passNo + 1;
-
-        } else {
-            passNo = 1;
-        }
     }
 
     toggleModal() {
         this.setState({
             isModelOpen: !this.state.isModelOpen,
+            passNo: this.props.data.passNo,
+            name: this.props.data.name,
+            contact: this.props.data.contact,
+            address: this.props.data.address,
+            requestedBy: this.props.data.requestedBy,
+            cordinatedBy: this.props.data.cordinatedBy,
+            carriedBy: this.props.data.carriedBy,
+            verifiedBy: this.props.data.verifiedBy,
+            nameError: this.props.data.nameError,
+            contactError: this.props.data.contactError,
+            addressError: this.props.data.addressError,
+            requestedByError: this.props.data.requestedByError,
+            cordinatedByError: this.props.data.cordinatedByError,
+            carriedByError: this.props.data.carriedByError,
+            verifiedByError: this.props.data.verifiedByError,
+            products: this.props.data.products,
         })
     }
 
     handleChange(event) {
+        console.log(event.target.value);
 
         if (event.target.name === 'contact') {
             const re = /^[0-9\b]+$/;
@@ -80,9 +68,11 @@ export default class AddNewButton extends Component {
             tempProducts[index] = {
                 id: event.target.value,
                 description: this.state.products[index].description,
+                date: this.state.products[index].date,
                 returnDate: this.state.products[index].returnDate,
                 qty: this.state.products[index].qty,
                 type: this.state.products[index].type,
+                status: this.state.products[index].status,
                 idError: this.state.products[index].idError,
                 descriptionError: this.state.products[index].descriptionError,
             };
@@ -95,9 +85,11 @@ export default class AddNewButton extends Component {
             tempProducts[index] = {
                 id: this.state.products[index].id,
                 description: event.target.value,
+                date: this.state.products[index].date,
                 returnDate: this.state.products[index].returnDate,
                 qty: this.state.products[index].qty,
                 type: this.state.products[index].type,
+                status: this.state.products[index].status,
                 idError: this.state.products[index].idError,
                 descriptionError: this.state.products[index].descriptionError,
             };
@@ -110,9 +102,11 @@ export default class AddNewButton extends Component {
             tempProducts[index] = {
                 id: this.state.products[index].id,
                 description: this.state.products[index].description,
+                date: this.state.products[index].date,
                 returnDate: event.target.value,
                 qty: this.state.products[index].qty,
                 type: this.state.products[index].type,
+                status: this.state.products[index].status,
                 idError: this.state.products[index].idError,
                 descriptionError: this.state.products[index].descriptionError,
             };
@@ -125,9 +119,11 @@ export default class AddNewButton extends Component {
             tempProducts[index] = {
                 id: this.state.products[index].id,
                 description: this.state.products[index].description,
+                date: this.state.products[index].date,
                 returnDate: this.state.products[index].returnDate,
                 qty: event.target.value,
                 type: this.state.products[index].type,
+                status: this.state.products[index].status,
                 idError: this.state.products[index].idError,
                 descriptionError: this.state.products[index].descriptionError,
             };
@@ -141,9 +137,28 @@ export default class AddNewButton extends Component {
             tempProducts[index] = {
                 id: this.state.products[index].id,
                 description: this.state.products[index].description,
+                date: this.state.products[index].date,
                 returnDate: this.state.products[index].returnDate,
                 qty: this.state.products[index].qty,
                 type: event.target.value,
+                status: this.state.products[index].status,
+                idError: this.state.products[index].idError,
+                descriptionError: this.state.products[index].descriptionError,
+            };
+            this.setState({
+                products: tempProducts,
+            });
+        } else if (event.target.name.includes('status')) {
+            const index = event.target.name.replace(/^\D+/g, "");
+            let tempProducts = this.state.products;
+            tempProducts[index] = {
+                id: this.state.products[index].id,
+                description: this.state.products[index].description,
+                date: this.state.products[index].date,
+                returnDate: this.state.products[index].returnDate,
+                qty: this.state.products[index].qty,
+                type: this.state.products[index].type,
+                status: event.target.value,
                 idError: this.state.products[index].idError,
                 descriptionError: this.state.products[index].descriptionError,
             };
@@ -161,89 +176,37 @@ export default class AddNewButton extends Component {
     handleSubmit(event) {
         event.preventDefault();
         if (this.validateInput()) {
-            //push to cloud
-
-            const productToUpload = this.state.products.map((product) => {
-                console.log('type is', product.type);
-                if (product.type === 'Returnable') {
-                    return {
-                        id: product.id,
-                        description: product.description,
-                        returnDate: product.returnDate,
-                        qty: product.qty,
-                        type: 'Returnable',
-                        status: false,
-                        date: minDateForForm.split("").reverse().join(""),
-                    };
-                } else {
-                    return {
-                        id: product.id,
-                        description: product.description,
-                        returnDate: product.returnDate,
-                        qty: product.qty,
-                        type: 'Non-Returnable',
-                        status: false,
-                        date: minDateForForm.split("").reverse().join(""),
-                    };
-                }
-            });
+            //update cloud document
             const db = firebase.firestore();
-            db.collection('issues').doc((passNo).toString()).set({
-                passNo: passNo,
-                name: this.state.name,
-                contact: this.state.contact,
-                address: this.state.address,
-                products: productToUpload,
-                verifiedBy: this.state.verifiedBy,
-                requestedBy: this.state.requestedBy,
-                cordinatedBy: this.state.cordinatedBy,
-                carriedBy: this.state.carriedBy
-            })
-                .then(function () {
-                    console.log("Document successfully written!");
-                })
-                .catch(function (error) {
-                    console.error("Error writing document: ", error);
-                });
-            this.toggleModal();
-            this.setState({
-                isModelOpen: false,
-                name: '',
-                contact: '',
-                address: '',
-                requestedBy: '',
-                cordinatedBy: '',
-                carriedBy: '',
-                verifiedBy: '',
-                nameError: '',
-                contactError: '',
-                addressError: '',
-                requestedByError: '',
-                cordinatedByError: '',
-                carriedByError: '',
-                verifiedByError: '',
-                products: [
-                    productMap,
-                ],
+
+            const updatedProduct = this.state.products.map((product) => {
+                console.log('details', product);
+
+                return {
+                    date: product.date,
+                    description: product.description,
+                    id: product.id,
+                    qty: product.qty,
+                    returnDate: product.returnDate,
+                    type: product.type,
+                    status: product.status,
+                };
             });
-            passNo++;
+
+            db.collection('issues').doc(this.state.passNo.toString()).update({
+                address: this.state.address,
+                carriedBy: this.state.carriedBy,
+                contact: this.state.contact,
+                cordinatedBy: this.state.cordinatedBy,
+                name: this.state.name,
+                passNo: this.state.passNo,
+                requestedBy: this.state.requestedBy,
+                verifiedBy: this.state.verifiedBy,
+                products: updatedProduct,
+            });
+
+            this.toggleModal();
         }
-    }
-
-    addProduct() {
-        let temp = this.state.products;
-        temp.push(productMap);
-        this.setState({
-            products: temp,
-        });
-    }
-
-    removeProduct(index) {
-        let temp = this.state.products;
-        temp.splice(index, 1);
-        this.setState({
-            products: temp,
-        });
     }
 
     validateInput() {
@@ -353,11 +316,12 @@ export default class AddNewButton extends Component {
 
 
     render() {
+        console.log('new item', this.props.data);
 
         return (
             <>
                 <Button variant="outline-dark" onClick={this.toggleModal}>
-                    <span className="fa fa-plus"></span> New
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                 </Button>
 
                 <Modal show={this.state.isModelOpen} onHide={this.toggleModal} size="lg">
@@ -366,7 +330,7 @@ export default class AddNewButton extends Component {
                             <Modal.Title>New Gate Pass</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <p>Gate Pass Number <strong>{passNo}</strong></p>
+                            <p>Gate Pass Number <strong>{this.state.passNo}</strong></p>
                             <h5>Personal Details</h5>
                             <div className="row mt-2">
                                 <div className="col-md-6 col-12">
@@ -399,12 +363,7 @@ export default class AddNewButton extends Component {
                                 </div>
                             </div>
                             <hr />
-                            <div className="row container mb-1">
-                                <h5 >Products Details</h5>
-                                <Button variant="outline-dark" onClick={this.addProduct} className="ml-auto">
-                                    <span className="fa fa-plus"></span> Product
-                                </Button>
-                            </div>
+                            <h5 >Products Details</h5>
                             <table className="table table-sm">
                                 <thead>
                                     <tr>
@@ -413,22 +372,25 @@ export default class AddNewButton extends Component {
                                         <th scope="col">Return Date</th>
                                         <th scope="col">Quantity</th>
                                         <th scope="col">Type</th>
+                                        <th scope="col">Returened</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+
                                     {this.state.products.map((product, index) => {
                                         return (
                                             <tr>
                                                 <td>
                                                     <input class="form-control align-middle"
                                                         name={'id' + index} id={"id" + index}
+                                                        value={product.id}
                                                         onChange={this.handleChange} type="text">
                                                     </input>
                                                     <small className="text-danger">{product.idError}</small>
                                                 </td>
                                                 <td>
                                                     <input class="form-control align-middle"
-                                                        onChange={this.handleChange}
+                                                        onChange={this.handleChange} value={product.description}
                                                         name={"description" + index} id={"description" + index}
                                                         type="text">
 
@@ -439,7 +401,7 @@ export default class AddNewButton extends Component {
                                                     <input class="form-control align-middle"
                                                         name={"returnDate" + index} id={"returnDate" + index}
                                                         onChange={this.handleChange} value={product.returnDate}
-                                                        type="date" min={minDateForForm}>
+                                                        type="date" >
                                                     </input>
                                                 </td>
                                                 <td>
@@ -452,18 +414,26 @@ export default class AddNewButton extends Component {
                                                 <td>
                                                     <select className="form-control align-middle" name={"type" + index}
                                                         id={"type" + index}
+                                                        value={product.type}
                                                         onChange={this.handleChange}>
                                                         <option selected>Returnable</option>
                                                         <option>Non-Returnable</option>
                                                     </select>
                                                 </td>
-                                                <td>
-                                                    {index != 0 ?
-                                                        <Button variant="outline-danger" onClick={() => this.removeProduct(index)} className="ml-auto">
-                                                            <span className="fa fa-times"></span>
-                                                        </Button>
-                                                        : null}
-                                                </td>
+                                                {
+                                                    product.type === 'Returnable'
+                                                        ? <td className="align-middle">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input position-static" onChange={this.handleChange}
+                                                                    type="checkbox" name={"status" + index} id={"status" + index} value="option1" aria-label="..." />
+                                                            </div>
+                                                        </td>
+                                                        : <td className="align-middle">
+                                                            <div class="form-check">
+                                                                <input disabled class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="option1" aria-label="..." />
+                                                            </div>
+                                                        </td>
+                                                }
                                             </tr>
                                         )
                                     })}
@@ -511,7 +481,7 @@ export default class AddNewButton extends Component {
                         </Modal.Body>
                         <Modal.Footer>
                             <Button variant="secondary" onClick={this.toggleModal}>Close</Button>
-                            <Button variant="primary" onClick={this.handleSubmit}>New Gate Pass</Button>
+                            <Button variant="primary" onClick={this.handleSubmit}>Update</Button>
                         </Modal.Footer>
                     </form>
                 </Modal>

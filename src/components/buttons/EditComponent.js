@@ -321,7 +321,7 @@ export default class AddNewButton extends Component {
         return (
             <>
                 <Button variant="outline-dark" onClick={this.toggleModal}>
-                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    <i className="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
                 </Button>
 
                 <Modal show={this.state.isModelOpen} onHide={this.toggleModal} size="lg">

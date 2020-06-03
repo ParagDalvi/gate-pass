@@ -70,5 +70,5 @@ export function createPdf(data) {
 
     doc.text(`Authorised Signature\n\n\n\nFacilities`, 170, 250, 'center');
 
-    doc.save('a4.pdf')
+    doc.save(`Pass No - ${data.passNo}.pdf`);
 }

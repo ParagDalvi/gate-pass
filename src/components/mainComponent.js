@@ -4,6 +4,7 @@ import ItemsList from './ItemsListComponent';
 import firebase from '../firebase/firebase';
 import AddNewButton from './buttons/AddNewButton';
 import ExportButton from './buttons/ExportComponent';
+import Login from './LoginComponent';
 
 
 export default class Main extends Component {
@@ -11,44 +12,67 @@ export default class Main extends Component {
         super(props);
 
         this.state = {
+            user: null,
             isLoading: true,
             issues: null,
         }
     }
 
     async componentDidMount() {
-        const db = firebase.firestore();
-        db.collection('issues').orderBy('passNo', 'desc').onSnapshot(
-            (querySnapshot) => {
-                this.setState({
-                    issues: querySnapshot.docs,
-                    isLoading: false,
-                });
-            },
-            (error) => {
-                console.log('custom', error.message);
-            });
+        this.authListener();
+    }
+
+    authListener() {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                this.setState({ user })
+                const db = firebase.firestore();
+                db.collection('issues').orderBy('passNo', 'desc').onSnapshot(
+                    (querySnapshot) => {
+                        this.setState({
+                            issues: querySnapshot.docs,
+                            isLoading: false,
+                        });
+                    },
+                    (error) => {
+                        console.log('custom', error.message);
+                    });
+            } else {
+                this.setState({ user: null })
+            }
+        });
     }
 
     render() {
-        return (
-            <div>
-                <Navbar />
-                {
-                    this.state.issues
-                        ? <div className="container">
-                            <br></br>
-                            <div className="row">
-                                <div className="ml-auto">
-                                    <ExportButton issues={this.state.issues} />
-                                    <AddNewButton issues={this.state.issues} />
+
+        if (this.state.user) {
+            console.log('user found');
+
+            return (
+                <div>
+                    <Navbar />
+                    {
+                        this.state.issues
+                            ? <div className="container">
+                                <br></br>
+                                <div className="row">
+                                    <div className="ml-auto">
+                                        <ExportButton issues={this.state.issues} />
+                                        <AddNewButton issues={this.state.issues} />
+                                    </div>
                                 </div>
+                                <ItemsList issues={this.state.issues} loading={this.state.isLoading} />
                             </div>
-                            <ItemsList issues={this.state.issues} loading={this.state.isLoading} />
-                        </div>
-                        : <p>Loading..</p>
-                }
-            </div>
-        );
+                            : <p>Loading..</p>
+                    }
+                </div>
+            );
+        } else {
+            console.log('no user found');
+
+            return (
+                <Login />
+            );
+        }
     }
 }

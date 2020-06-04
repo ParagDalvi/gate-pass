@@ -172,7 +172,7 @@ export default class AddNewButton extends Component {
                         returnDate: product.returnDate,
                         qty: product.qty,
                         type: 'Returnable',
-                        status: false,
+                        status: 'Not Returned',
                         date: minDateForForm.split("").reverse().join(""),
                     };
                 } else {
@@ -182,7 +182,7 @@ export default class AddNewButton extends Component {
                         returnDate: product.returnDate,
                         qty: product.qty,
                         type: 'Non-Returnable',
-                        status: false,
+                        status: "Not Returned",
                         date: minDateForForm.split("").reverse().join(""),
                     };
                 }
@@ -312,7 +312,6 @@ export default class AddNewButton extends Component {
         for (let index = 0; index < this.state.products.length; index++) {
 
             const product = this.state.products[index];
-            console.log(product);
             var idError = '';
             var descriptionError = '';
             if (product.id.trim().length === 0) {

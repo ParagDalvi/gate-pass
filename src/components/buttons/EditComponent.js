@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import firebase from '../../firebase/firebase'
+import ModalHeader from 'react-bootstrap/ModalHeader';
+
+
+const dateObj = new Date();
+const minDateForForm = dateObj.getFullYear() + '-' + String(dateObj.getMonth() + 1).padStart(2, '0') + '-' + String(dateObj.getDate()).padStart(2, '0');
+
+
 
 export default class AddNewButton extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            passNo: this.props.data.passNo,
             isModelOpen: false,
+            passNo: this.props.data.passNo,
             name: this.props.data.name,
             contact: this.props.data.contact,
             address: this.props.data.address,
@@ -16,47 +23,30 @@ export default class AddNewButton extends Component {
             cordinatedBy: this.props.data.cordinatedBy,
             carriedBy: this.props.data.carriedBy,
             verifiedBy: this.props.data.verifiedBy,
-            nameError: this.props.data.nameError,
-            contactError: this.props.data.contactError,
-            addressError: this.props.data.addressError,
-            requestedByError: this.props.data.requestedByError,
-            cordinatedByError: this.props.data.cordinatedByError,
-            carriedByError: this.props.data.carriedByError,
-            verifiedByError: this.props.data.verifiedByError,
+            nameError: '',
+            contactError: '',
+            addressError: '',
+            requestedByError: '',
+            cordinatedByError: '',
+            carriedByError: '',
+            verifiedByError: '',
             products: this.props.data.products,
-        };
+        }
 
         this.toggleModal = this.toggleModal.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.validateInput = this.validateInput.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+
     }
 
     toggleModal() {
         this.setState({
             isModelOpen: !this.state.isModelOpen,
-            passNo: this.props.data.passNo,
-            name: this.props.data.name,
-            contact: this.props.data.contact,
-            address: this.props.data.address,
-            requestedBy: this.props.data.requestedBy,
-            cordinatedBy: this.props.data.cordinatedBy,
-            carriedBy: this.props.data.carriedBy,
-            verifiedBy: this.props.data.verifiedBy,
-            nameError: this.props.data.nameError,
-            contactError: this.props.data.contactError,
-            addressError: this.props.data.addressError,
-            requestedByError: this.props.data.requestedByError,
-            cordinatedByError: this.props.data.cordinatedByError,
-            carriedByError: this.props.data.carriedByError,
-            verifiedByError: this.props.data.verifiedByError,
-            products: this.props.data.products,
         })
     }
 
     handleChange(event) {
-        console.log(event.target.value);
-
         if (event.target.name === 'contact') {
             const re = /^[0-9\b]+$/;
             if (event.target.value === '' || re.test(event.target.value)) {
@@ -68,7 +58,6 @@ export default class AddNewButton extends Component {
             tempProducts[index] = {
                 id: event.target.value,
                 description: this.state.products[index].description,
-                date: this.state.products[index].date,
                 returnDate: this.state.products[index].returnDate,
                 qty: this.state.products[index].qty,
                 type: this.state.products[index].type,
@@ -85,7 +74,6 @@ export default class AddNewButton extends Component {
             tempProducts[index] = {
                 id: this.state.products[index].id,
                 description: event.target.value,
-                date: this.state.products[index].date,
                 returnDate: this.state.products[index].returnDate,
                 qty: this.state.products[index].qty,
                 type: this.state.products[index].type,
@@ -102,7 +90,6 @@ export default class AddNewButton extends Component {
             tempProducts[index] = {
                 id: this.state.products[index].id,
                 description: this.state.products[index].description,
-                date: this.state.products[index].date,
                 returnDate: event.target.value,
                 qty: this.state.products[index].qty,
                 type: this.state.products[index].type,
@@ -119,7 +106,6 @@ export default class AddNewButton extends Component {
             tempProducts[index] = {
                 id: this.state.products[index].id,
                 description: this.state.products[index].description,
-                date: this.state.products[index].date,
                 returnDate: this.state.products[index].returnDate,
                 qty: event.target.value,
                 type: this.state.products[index].type,
@@ -137,7 +123,6 @@ export default class AddNewButton extends Component {
             tempProducts[index] = {
                 id: this.state.products[index].id,
                 description: this.state.products[index].description,
-                date: this.state.products[index].date,
                 returnDate: this.state.products[index].returnDate,
                 qty: this.state.products[index].qty,
                 type: event.target.value,
@@ -149,16 +134,16 @@ export default class AddNewButton extends Component {
                 products: tempProducts,
             });
         } else if (event.target.name.includes('status')) {
+
             const index = event.target.name.replace(/^\D+/g, "");
             let tempProducts = this.state.products;
             tempProducts[index] = {
                 id: this.state.products[index].id,
                 description: this.state.products[index].description,
-                date: this.state.products[index].date,
                 returnDate: this.state.products[index].returnDate,
                 qty: this.state.products[index].qty,
-                type: this.state.products[index].type,
-                status: event.target.value,
+                type: this.state.products[index].qty,
+                status: event.target.checked,
                 idError: this.state.products[index].idError,
                 descriptionError: this.state.products[index].descriptionError,
             };
@@ -170,42 +155,6 @@ export default class AddNewButton extends Component {
             this.setState({
                 [event.target.name]: event.target.value,
             });
-        }
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
-        if (this.validateInput()) {
-            //update cloud document
-            const db = firebase.firestore();
-
-            const updatedProduct = this.state.products.map((product) => {
-                console.log('details', product);
-
-                return {
-                    date: product.date,
-                    description: product.description,
-                    id: product.id,
-                    qty: product.qty,
-                    returnDate: product.returnDate,
-                    type: product.type,
-                    status: product.status,
-                };
-            });
-
-            db.collection('issues').doc(this.state.passNo.toString()).update({
-                address: this.state.address,
-                carriedBy: this.state.carriedBy,
-                contact: this.state.contact,
-                cordinatedBy: this.state.cordinatedBy,
-                name: this.state.name,
-                passNo: this.state.passNo,
-                requestedBy: this.state.requestedBy,
-                verifiedBy: this.state.verifiedBy,
-                products: updatedProduct,
-            });
-
-            this.toggleModal();
         }
     }
 
@@ -275,7 +224,6 @@ export default class AddNewButton extends Component {
         for (let index = 0; index < this.state.products.length; index++) {
 
             const product = this.state.products[index];
-            console.log(product);
             var idError = '';
             var descriptionError = '';
             if (product.id.trim().length === 0) {
@@ -296,6 +244,7 @@ export default class AddNewButton extends Component {
                 returnDate: product.returnDate,
                 qty: product.qty,
                 type: product.type,
+                status: product.status,
                 idError: idError,
                 descriptionError: descriptionError,
             });
@@ -315,19 +264,45 @@ export default class AddNewButton extends Component {
     }
 
 
-    render() {
-        console.log('new item', this.props.data);
+    handleSubmit(event) {
+        event.preventDefault();
+        if (this.validateInput()) {
+            //update on cloud
+            console.log('products', this.state.products);
 
+            const db = firebase.firestore();
+            db.collection('issues').doc((this.state.passNo).toString()).update({
+                passNo: this.state.passNo,
+                name: this.state.name,
+                contact: this.state.contact,
+                address: this.state.address,
+                products: this.state.products,
+                verifiedBy: this.state.verifiedBy,
+                requestedBy: this.state.requestedBy,
+                cordinatedBy: this.state.cordinatedBy,
+                carriedBy: this.state.carriedBy
+            })
+                .then(function () {
+                    console.log("Document successfully updated!");
+                })
+                .catch(function (error) {
+                    console.error("Error writing document: ", error);
+                });
+            this.toggleModal();
+        }
+    }
+
+    render() {
         return (
             <>
                 <Button variant="outline-dark" onClick={this.toggleModal}>
-                    <i className="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
+                    <span className="fa fa-edit"></span> Edit
                 </Button>
 
                 <Modal show={this.state.isModelOpen} onHide={this.toggleModal} size="lg">
                     <form>
                         <Modal.Header closeButton>
-                            <Modal.Title>New Gate Pass</Modal.Title>
+                            <Modal.Title>Update details</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             <p>Gate Pass Number <strong>{this.state.passNo}</strong></p>
@@ -363,7 +338,9 @@ export default class AddNewButton extends Component {
                                 </div>
                             </div>
                             <hr />
-                            <h5 >Products Details</h5>
+                            <div className="row container mb-1">
+                                <h5 >Products Details</h5>
+                            </div>
                             <table className="table table-sm">
                                 <thead>
                                     <tr>
@@ -372,11 +349,10 @@ export default class AddNewButton extends Component {
                                         <th scope="col">Return Date</th>
                                         <th scope="col">Quantity</th>
                                         <th scope="col">Type</th>
-                                        <th scope="col">Returened</th>
+                                        <th scope="col">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-
                                     {this.state.products.map((product, index) => {
                                         return (
                                             <tr>
@@ -390,7 +366,8 @@ export default class AddNewButton extends Component {
                                                 </td>
                                                 <td>
                                                     <input class="form-control align-middle"
-                                                        onChange={this.handleChange} value={product.description}
+                                                        value={product.description}
+                                                        onChange={this.handleChange}
                                                         name={"description" + index} id={"description" + index}
                                                         type="text">
 
@@ -399,41 +376,41 @@ export default class AddNewButton extends Component {
                                                 </td>
                                                 <td>
                                                     <input class="form-control align-middle"
+                                                        value={product.returnDate}
                                                         name={"returnDate" + index} id={"returnDate" + index}
                                                         onChange={this.handleChange} value={product.returnDate}
-                                                        type="date" >
+                                                        type="date" min={minDateForForm}>
                                                     </input>
                                                 </td>
                                                 <td>
                                                     <input class="form-control align-middle"
+                                                        value={product.qty}
                                                         name={"qty" + index} id={"qty" + index}
                                                         onChange={this.handleChange} value={product.qty}
                                                         type="number" min="1">
                                                     </input>
                                                 </td>
                                                 <td>
-                                                    <select className="form-control align-middle" name={"type" + index}
+                                                    <select className="form-control align-middle"
+                                                        value={product.type} name={"type" + index}
                                                         id={"type" + index}
-                                                        value={product.type}
                                                         onChange={this.handleChange}>
                                                         <option selected>Returnable</option>
                                                         <option>Non-Returnable</option>
                                                     </select>
                                                 </td>
-                                                {
-                                                    product.type === 'Returnable'
-                                                        ? <td className="align-middle">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input position-static" onChange={this.handleChange}
-                                                                    type="checkbox" name={"status" + index} id={"status" + index} value="option1" aria-label="..." />
-                                                            </div>
-                                                        </td>
-                                                        : <td className="align-middle">
-                                                            <div class="form-check">
-                                                                <input disabled class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="option1" aria-label="..." />
-                                                            </div>
-                                                        </td>
-                                                }
+                                                <td>
+                                                    <div class="form-check align-items-center align-self-center">
+                                                        <input class="form-check-input"
+                                                            value={product.status}
+                                                            disabled={product.type !== 'Returnable'}
+                                                            name={"status" + index}
+                                                            defaultChecked={product.status}
+                                                            onChange={this.handleChange}
+                                                            type="checkbox" value="" id={product.status}>
+                                                        </input>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         )
                                     })}

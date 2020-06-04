@@ -26,13 +26,19 @@ function ItemsList({ issues, loading }) {
 export default ItemsList;
 
 
-
 function SingleItem({ data }) {
 
-    function buttonClick() {
-        console.log('clicked');
-
+    
+    var status = true;
+    for (let index = 0; index < data.products.length; index++) {
+        const product = data.products[index];
+        if (product.status === 'Returned') {
+            status = false;
+            break;
+        }
+        console.log(status);
     }
+
     return (
         <div className="row">
             <div className="col-8">
@@ -41,6 +47,12 @@ function SingleItem({ data }) {
                         <Accordion.Toggle as={Card.Header} eventKey="0" className="pointer-card">
                             <div className="row">
                                 <p><small>Pass </small><strong>{data.passNo}, {data.name}</strong></p>
+                                {
+                                    status
+                                    ? <strong className="ml-auto mr-2 text-success">Clear</strong>
+                                    : <strong className="ml-auto mr-2 text-warning">Pending</strong>
+                                
+                                }
                             </div>
                         </Accordion.Toggle>
 
@@ -87,7 +99,7 @@ function SingleItem({ data }) {
                                                     <td>{product.returnDate}</td>
                                                     <td>{product.qty}</td>
                                                     <td>{product.type}</td>
-                                                    {product.status ? <span className="fa fa-check"></span> : <span className="fa fa-times"></span>}
+                                                    {product.status === 'Returned' ? <span className="fa fa-check"></span> : <span className="fa fa-times"></span>}
                                                 </tr>
                                             )
                                         })}

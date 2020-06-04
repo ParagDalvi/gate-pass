@@ -7,7 +7,6 @@ import Logo from '../../../src/assets/images/logo.png'
 
 
 export function createPdf(data) {
-    console.log('print');
     var doc = new jsPDF();
 
     doc.setFontSize(9);

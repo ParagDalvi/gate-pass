@@ -16,3 +16,7 @@ code {
 .pointer-card{
   cursor: pointer;
 }
+
+.custom-table{
+  overflow-x:auto;
+}

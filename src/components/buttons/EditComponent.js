@@ -43,6 +43,22 @@ export default class AddNewButton extends Component {
     toggleModal() {
         this.setState({
             isModelOpen: !this.state.isModelOpen,
+            passNo: this.props.data.passNo,
+            name: this.props.data.name,
+            contact: this.props.data.contact,
+            address: this.props.data.address,
+            requestedBy: this.props.data.requestedBy,
+            cordinatedBy: this.props.data.cordinatedBy,
+            carriedBy: this.props.data.carriedBy,
+            verifiedBy: this.props.data.verifiedBy,
+            nameError: '',
+            contactError: '',
+            addressError: '',
+            requestedByError: '',
+            cordinatedByError: '',
+            carriedByError: '',
+            verifiedByError: '',
+            products: this.props.data.products,
         })
     }
 
@@ -58,6 +74,7 @@ export default class AddNewButton extends Component {
             tempProducts[index] = {
                 id: event.target.value,
                 description: this.state.products[index].description,
+                date: this.state.products[index].date,
                 returnDate: this.state.products[index].returnDate,
                 qty: this.state.products[index].qty,
                 type: this.state.products[index].type,
@@ -74,6 +91,7 @@ export default class AddNewButton extends Component {
             tempProducts[index] = {
                 id: this.state.products[index].id,
                 description: event.target.value,
+                date: this.state.products[index].date,
                 returnDate: this.state.products[index].returnDate,
                 qty: this.state.products[index].qty,
                 type: this.state.products[index].type,
@@ -90,6 +108,7 @@ export default class AddNewButton extends Component {
             tempProducts[index] = {
                 id: this.state.products[index].id,
                 description: this.state.products[index].description,
+                date: this.state.products[index].date,
                 returnDate: event.target.value,
                 qty: this.state.products[index].qty,
                 type: this.state.products[index].type,
@@ -106,6 +125,7 @@ export default class AddNewButton extends Component {
             tempProducts[index] = {
                 id: this.state.products[index].id,
                 description: this.state.products[index].description,
+                date: this.state.products[index].date,
                 returnDate: this.state.products[index].returnDate,
                 qty: event.target.value,
                 type: this.state.products[index].type,
@@ -123,6 +143,7 @@ export default class AddNewButton extends Component {
             tempProducts[index] = {
                 id: this.state.products[index].id,
                 description: this.state.products[index].description,
+                date: this.state.products[index].date,
                 returnDate: this.state.products[index].returnDate,
                 qty: this.state.products[index].qty,
                 type: event.target.value,
@@ -140,6 +161,7 @@ export default class AddNewButton extends Component {
             tempProducts[index] = {
                 id: this.state.products[index].id,
                 description: this.state.products[index].description,
+                date: this.state.products[index].date,
                 returnDate: this.state.products[index].returnDate,
                 qty: this.state.products[index].qty,
                 type: this.state.products[index].qty,
@@ -268,15 +290,26 @@ export default class AddNewButton extends Component {
         event.preventDefault();
         if (this.validateInput()) {
             //update on cloud
-            console.log('products', this.state.products);
 
+
+            const updatedProducts = this.state.products.map((product) => {
+                return {
+                    date: product.date,
+                    description: product.description,
+                    id: product.id,
+                    qty: product.qty,
+                    returnDate: product.returnDate,
+                    status: product.status,
+                    type: product.type,
+                };
+            });
             const db = firebase.firestore();
             db.collection('issues').doc((this.state.passNo).toString()).update({
                 passNo: this.state.passNo,
                 name: this.state.name,
                 contact: this.state.contact,
                 address: this.state.address,
-                products: this.state.products,
+                products: updatedProducts,
                 verifiedBy: this.state.verifiedBy,
                 requestedBy: this.state.requestedBy,
                 cordinatedBy: this.state.cordinatedBy,
@@ -341,81 +374,85 @@ export default class AddNewButton extends Component {
                             <div className="row container mb-1">
                                 <h5 >Products Details</h5>
                             </div>
-                            <table className="table table-sm">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">ID</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">Return Date</th>
-                                        <th scope="col">Quantity</th>
-                                        <th scope="col">Type</th>
-                                        <th scope="col">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.state.products.map((product, index) => {
-                                        return (
-                                            <tr>
-                                                <td>
-                                                    <input class="form-control align-middle"
-                                                        name={'id' + index} id={"id" + index}
-                                                        value={product.id}
-                                                        onChange={this.handleChange} type="text">
-                                                    </input>
-                                                    <small className="text-danger">{product.idError}</small>
-                                                </td>
-                                                <td>
-                                                    <input class="form-control align-middle"
-                                                        value={product.description}
-                                                        onChange={this.handleChange}
-                                                        name={"description" + index} id={"description" + index}
-                                                        type="text">
+                            <div className="table-responsive">
 
-                                                    </input>
-                                                    <small className="text-danger">{product.descriptionError}</small>
-                                                </td>
-                                                <td>
-                                                    <input class="form-control align-middle"
-                                                        value={product.returnDate}
-                                                        name={"returnDate" + index} id={"returnDate" + index}
-                                                        onChange={this.handleChange} value={product.returnDate}
-                                                        type="date" min={minDateForForm}>
-                                                    </input>
-                                                </td>
-                                                <td>
-                                                    <input class="form-control align-middle"
-                                                        value={product.qty}
-                                                        name={"qty" + index} id={"qty" + index}
-                                                        onChange={this.handleChange} value={product.qty}
-                                                        type="number" min="1">
-                                                    </input>
-                                                </td>
-                                                <td>
-                                                    <select className="form-control align-middle"
-                                                        value={product.type} name={"type" + index}
-                                                        id={"type" + index}
-                                                        onChange={this.handleChange}>
-                                                        <option selected>Returnable</option>
-                                                        <option>Non-Returnable</option>
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check align-items-center align-self-center">
-                                                        <input class="form-check-input"
-                                                            value={product.status}
-                                                            disabled={product.type !== 'Returnable'}
-                                                            name={"status" + index}
-                                                            defaultChecked={product.status}
-                                                            onChange={this.handleChange}
-                                                            type="checkbox" value="" id={product.status}>
+
+                                <table className="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Return Date</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Type</th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {this.state.products.map((product, index) => {
+                                            return (
+                                                <tr>
+                                                    <td>
+                                                        <input class="form-control align-middle"
+                                                            name={'id' + index} id={"id" + index}
+                                                            value={product.id}
+                                                            onChange={this.handleChange} type="text">
                                                         </input>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        )
-                                    })}
-                                </tbody>
-                            </table>
+                                                        <small className="text-danger">{product.idError}</small>
+                                                    </td>
+                                                    <td>
+                                                        <input class="form-control align-middle"
+                                                            value={product.description}
+                                                            onChange={this.handleChange}
+                                                            name={"description" + index} id={"description" + index}
+                                                            type="text">
+
+                                                        </input>
+                                                        <small className="text-danger">{product.descriptionError}</small>
+                                                    </td>
+                                                    <td>
+                                                        <input class="form-control align-middle"
+                                                            value={product.returnDate}
+                                                            name={"returnDate" + index} id={"returnDate" + index}
+                                                            onChange={this.handleChange} value={product.returnDate.split('-').reverse().join('-')}
+                                                            type="date" min={minDateForForm}>
+                                                        </input>
+                                                    </td>
+                                                    <td>
+                                                        <input class="form-control align-middle"
+                                                            value={product.qty}
+                                                            name={"qty" + index} id={"qty" + index}
+                                                            onChange={this.handleChange} value={product.qty}
+                                                            type="number" min="1">
+                                                        </input>
+                                                    </td>
+                                                    <td>
+                                                        <select className="form-control align-middle"
+                                                            value={product.type} name={"type" + index}
+                                                            id={"type" + index}
+                                                            onChange={this.handleChange}>
+                                                            <option selected>Returnable</option>
+                                                            <option>Non-Returnable</option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-check align-items-center align-self-center">
+                                                            <input class="form-check-input"
+                                                                value={product.status}
+                                                                disabled={product.type === 'Non-Returnable'}
+                                                                name={"status" + index}
+                                                                defaultChecked={product.status}
+                                                                onChange={this.handleChange}
+                                                                type="checkbox" value="" id={product.status}>
+                                                            </input>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
                             <h5>Authorization</h5>
                             <div className="row mt-2">
                                 <div className="col-md-3 col-6">

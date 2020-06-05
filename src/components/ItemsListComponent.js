@@ -28,15 +28,14 @@ export default ItemsList;
 
 function SingleItem({ data }) {
 
-    
+
     var status = true;
     for (let index = 0; index < data.products.length; index++) {
         const product = data.products[index];
-        if (product.status === 'Returned') {
+        if (!product.status) {
             status = false;
             break;
         }
-        console.log(status);
     }
 
     return (
@@ -49,9 +48,9 @@ function SingleItem({ data }) {
                                 <p><small>Pass </small><strong>{data.passNo}, {data.name}</strong></p>
                                 {
                                     status
-                                    ? <strong className="ml-auto mr-2 text-success">Clear</strong>
-                                    : <strong className="ml-auto mr-2 text-warning">Pending</strong>
-                                
+                                        ? <strong className="ml-auto mr-2 text-success">Clear</strong>
+                                        : <strong className="ml-auto mr-2 text-warning">Pending</strong>
+
                                 }
                             </div>
                         </Accordion.Toggle>
@@ -77,34 +76,36 @@ function SingleItem({ data }) {
                                 </div>
                                 <hr></hr>
                                 <h5>Products</h5>
-                                <table className="table table-sm table-dark">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">ID</th>
-                                            <th scope="col">Description</th>
-                                            <th scope="col">Issue Date</th>
-                                            <th scope="col">Return Date</th>
-                                            <th scope="col">Quantity</th>
-                                            <th scope="col">Type</th>
-                                            <th scope="col">Returned</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {data.products.map((product) => {
-                                            return (
-                                                <tr>
-                                                    <th scope="row">{product.id}</th>
-                                                    <td>{product.description}</td>
-                                                    <td>{product.date}</td>
-                                                    <td>{product.returnDate}</td>
-                                                    <td>{product.qty}</td>
-                                                    <td>{product.type}</td>
-                                                    {product.status === 'Returned' ? <span className="fa fa-check"></span> : <span className="fa fa-times"></span>}
-                                                </tr>
-                                            )
-                                        })}
-                                    </tbody>
-                                </table>
+                                <div classname="table-responsive custom-table">
+                                    <table className="table table-sm table-dark">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Issue Date</th>
+                                                <th scope="col">Return Date</th>
+                                                <th scope="col">Quantity</th>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">Returned</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {data.products.map((product) => {
+                                                return (
+                                                    <tr>
+                                                        <th scope="row">{product.id}</th>
+                                                        <td>{product.description}</td>
+                                                        <td>{product.date}</td>
+                                                        <td>{product.returnDate}</td>
+                                                        <td>{product.qty}</td>
+                                                        <td>{product.type}</td>
+                                                        {product.status ? <span className="fa fa-check"></span> : <span className="fa fa-times"></span>}
+                                                    </tr>
+                                                )
+                                            })}
+                                        </tbody>
+                                    </table>
+                                </div>
                                 <hr></hr>
                                 <h5>Authorization</h5>
                                 <div className="row">

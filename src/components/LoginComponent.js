@@ -50,7 +50,7 @@ export default class Login extends Component {
                             <div className="container">
                                 <div className="card">
                                     <div class="card-body">
-                                        <h5 className="card-title mb-4">Gate Pass Sys. Login</h5>
+                                        <h5 className="card-title mb-4">Gate Pass System Login</h5>
                                         <div className="form-group">
                                             <label htmlFor="exampleInputEmail1">Email address</label>
                                             <input type="email" className="form-control"

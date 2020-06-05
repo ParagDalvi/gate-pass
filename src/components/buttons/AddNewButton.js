@@ -164,26 +164,25 @@ export default class AddNewButton extends Component {
             //push to cloud
 
             const productToUpload = this.state.products.map((product) => {
-                console.log('type is', product.type);
                 if (product.type === 'Returnable') {
                     return {
                         id: product.id,
                         description: product.description,
-                        returnDate: product.returnDate,
+                        returnDate: product.returnDate.split('-').reverse().join('-'),
                         qty: product.qty,
                         type: 'Returnable',
-                        status: 'Not Returned',
-                        date: minDateForForm.split("").reverse().join(""),
+                        status: false,
+                        date: String(dateObj.getDate()).padStart(2, '0') + '-' + String(dateObj.getMonth() + 1).padStart(2, '0') + '-' + dateObj.getFullYear(),
                     };
                 } else {
                     return {
                         id: product.id,
                         description: product.description,
-                        returnDate: product.returnDate,
+                        returnDate: product.returnDate.split('-').reverse().join('-'),
                         qty: product.qty,
                         type: 'Non-Returnable',
-                        status: "Not Returned",
-                        date: minDateForForm.split("").reverse().join(""),
+                        status: false,
+                        date: String(dateObj.getDate()).padStart(2, '0') + '-' + String(dateObj.getMonth() + 1).padStart(2, '0') + '-' + dateObj.getFullYear(),
                     };
                 }
             });
@@ -404,70 +403,72 @@ export default class AddNewButton extends Component {
                                     <span className="fa fa-plus"></span> Product
                                 </Button>
                             </div>
-                            <table className="table table-sm">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">ID</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">Return Date</th>
-                                        <th scope="col">Quantity</th>
-                                        <th scope="col">Type</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.state.products.map((product, index) => {
-                                        return (
-                                            <tr>
-                                                <td>
-                                                    <input class="form-control align-middle"
-                                                        name={'id' + index} id={"id" + index}
-                                                        onChange={this.handleChange} type="text">
-                                                    </input>
-                                                    <small className="text-danger">{product.idError}</small>
-                                                </td>
-                                                <td>
-                                                    <input class="form-control align-middle"
-                                                        onChange={this.handleChange}
-                                                        name={"description" + index} id={"description" + index}
-                                                        type="text">
+                            <div className="table-responsive">
+                                <table className="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Return Date</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Type</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {this.state.products.map((product, index) => {
+                                            return (
+                                                <tr>
+                                                    <td>
+                                                        <input class="form-control align-middle"
+                                                            name={'id' + index} id={"id" + index}
+                                                            onChange={this.handleChange} type="text">
+                                                        </input>
+                                                        <small className="text-danger">{product.idError}</small>
+                                                    </td>
+                                                    <td>
+                                                        <input class="form-control align-middle"
+                                                            onChange={this.handleChange}
+                                                            name={"description" + index} id={"description" + index}
+                                                            type="text">
 
-                                                    </input>
-                                                    <small className="text-danger">{product.descriptionError}</small>
-                                                </td>
-                                                <td>
-                                                    <input class="form-control align-middle"
-                                                        name={"returnDate" + index} id={"returnDate" + index}
-                                                        onChange={this.handleChange} value={product.returnDate}
-                                                        type="date" min={minDateForForm}>
-                                                    </input>
-                                                </td>
-                                                <td>
-                                                    <input class="form-control align-middle"
-                                                        name={"qty" + index} id={"qty" + index}
-                                                        onChange={this.handleChange} value={product.qty}
-                                                        type="number" min="1">
-                                                    </input>
-                                                </td>
-                                                <td>
-                                                    <select className="form-control align-middle" name={"type" + index}
-                                                        id={"type" + index}
-                                                        onChange={this.handleChange}>
-                                                        <option selected>Returnable</option>
-                                                        <option>Non-Returnable</option>
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    {index != 0 ?
-                                                        <Button variant="outline-danger" onClick={() => this.removeProduct(index)} className="ml-auto">
-                                                            <span className="fa fa-times"></span>
-                                                        </Button>
-                                                        : null}
-                                                </td>
-                                            </tr>
-                                        )
-                                    })}
-                                </tbody>
-                            </table>
+                                                        </input>
+                                                        <small className="text-danger">{product.descriptionError}</small>
+                                                    </td>
+                                                    <td>
+                                                        <input class="form-control align-middle"
+                                                            name={"returnDate" + index} id={"returnDate" + index}
+                                                            onChange={this.handleChange} value={product.returnDate}
+                                                            type="date" min={minDateForForm}>
+                                                        </input>
+                                                    </td>
+                                                    <td>
+                                                        <input class="form-control align-middle"
+                                                            name={"qty" + index} id={"qty" + index}
+                                                            onChange={this.handleChange} value={product.qty}
+                                                            type="number" min="1">
+                                                        </input>
+                                                    </td>
+                                                    <td>
+                                                        <select className="form-control align-middle" name={"type" + index}
+                                                            id={"type" + index}
+                                                            onChange={this.handleChange}>
+                                                            <option selected>Returnable</option>
+                                                            <option>Non-Returnable</option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        {index != 0 ?
+                                                            <Button variant="outline-danger" onClick={() => this.removeProduct(index)} className="ml-auto">
+                                                                <span className="fa fa-times"></span>
+                                                            </Button>
+                                                            : null}
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
                             <h5>Authorization</h5>
                             <div className="row mt-2">
                                 <div className="col-md-3 col-6">

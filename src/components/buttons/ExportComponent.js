@@ -76,7 +76,8 @@ export default function ExportButton({ issues }) {
     }
 
     const date = new Date();
-    const filename = date.getDate().toString() + '-' + date.getMonth().toString() + '-' + date.getFullYear().toString()
+    const filename = date.getDate().toString() + '-' + (date.getMonth() + 1).toString() + '-' + date.getFullYear().toString();
+
 
     return (
         <CSVLink className="btn btn-outline-dark mr-2" data={data} headers={headers} filename={`${filename}.csv`}>

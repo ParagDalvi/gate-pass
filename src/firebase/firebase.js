@@ -1,14 +1,14 @@
 import firebase from 'firebase';
 
 var firebaseConfig = {
-    apiKey: "AIzaSyAc6Em7o91mnnH5U0uhZ8DZF1ZGqe6GdEs",
-    authDomain: "log-me-in-0.firebaseapp.com",
-    databaseURL: "https://log-me-in-0.firebaseio.com",
-    projectId: "log-me-in-0",
-    storageBucket: "log-me-in-0.appspot.com",
-    messagingSenderId: "110052693622",
-    appId: "1:110052693622:web:8660be1938473cd20af157",
-    measurementId: "G-ZHW4H9LNNM"
+    apiKey: "AIzaSyD2JFjiNNIiXq6SXvuOkdUgvp7DVuAAxEE",
+    authDomain: "logmein-gate-pass.firebaseapp.com",
+    databaseURL: "https://logmein-gate-pass.firebaseio.com",
+    projectId: "logmein-gate-pass",
+    storageBucket: "logmein-gate-pass.appspot.com",
+    messagingSenderId: "55828838144",
+    appId: "1:55828838144:web:0a7851d7a3290e6488e5e5",
+    measurementId: "G-CQ78256EKM"
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);

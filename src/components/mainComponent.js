@@ -46,11 +46,10 @@ export default class Main extends Component {
     render() {
 
         if (this.state.user) {
-            console.log('user found');
 
             return (
                 <div>
-                    <Navbar frompage="main"/>
+                    <Navbar frompage="main" />
                     {
                         this.state.issues
                             ? <div className="container">
@@ -68,7 +67,6 @@ export default class Main extends Component {
                 </div>
             );
         } else {
-            console.log('no user found');
 
             return (
                 <Login />

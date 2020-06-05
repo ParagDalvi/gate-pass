@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React  from 'react';
 import { Accordion, Card, Button } from 'react-bootstrap';
 import EditComponent from './buttons/EditComponent';
-import { PdfButton, createPdf } from './functions/pdf'
+import { createPdf } from './functions/pdf'
 
 function ItemsList({ issues, loading }) {
     if (issues) {

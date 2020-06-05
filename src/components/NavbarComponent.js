@@ -7,8 +7,8 @@ function Navbar({ frompage }) {
         firebase.auth().signOut();
     }
     return (
-        <nav class="navbar navbar-dark bg-dark">
-            <img src={logo} width="30%" height="30%" class="d-inline-block align-top" alt="log" />
+        <nav className="navbar navbar-dark bg-dark">
+            <img src={logo} width="30%" height="30%" className="d-inline-block align-top" alt="log" />
             {
                 frompage === 'main'
                     ? <button onClick={handleLogout} type="button" className="ml-auto btn btn-outline-light">

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
 import { CSVLink } from 'react-csv';
 
 export default function ExportButton({ issues }) {

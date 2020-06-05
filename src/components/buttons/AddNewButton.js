@@ -419,14 +419,14 @@ export default class AddNewButton extends Component {
                                             return (
                                                 <tr>
                                                     <td>
-                                                        <input class="form-control align-middle"
+                                                        <input className="form-control align-middle"
                                                             name={'id' + index} id={"id" + index}
                                                             onChange={this.handleChange} type="text">
                                                         </input>
                                                         <small className="text-danger">{product.idError}</small>
                                                     </td>
                                                     <td>
-                                                        <input class="form-control align-middle"
+                                                        <input className="form-control align-middle"
                                                             onChange={this.handleChange}
                                                             name={"description" + index} id={"description" + index}
                                                             type="text">
@@ -435,14 +435,14 @@ export default class AddNewButton extends Component {
                                                         <small className="text-danger">{product.descriptionError}</small>
                                                     </td>
                                                     <td>
-                                                        <input class="form-control align-middle"
+                                                        <input className="form-control align-middle"
                                                             name={"returnDate" + index} id={"returnDate" + index}
                                                             onChange={this.handleChange} value={product.returnDate}
                                                             type="date" min={minDateForForm}>
                                                         </input>
                                                     </td>
                                                     <td>
-                                                        <input class="form-control align-middle"
+                                                        <input className="form-control align-middle"
                                                             name={"qty" + index} id={"qty" + index}
                                                             onChange={this.handleChange} value={product.qty}
                                                             type="number" min="1">

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import NavbarComponent from './NavbarComponent';
 import firebase from '../../src/firebase/firebase'
-import Background from '../../src/assets/images/logo.png';
 
 export default class Login extends Component {
 
@@ -49,7 +48,7 @@ export default class Login extends Component {
                         <form onSubmit={this.handleSubmit}>
                             <div className="container">
                                 <div className="card">
-                                    <div class="card-body">
+                                    <div className="card-body">
                                         <h5 className="card-title mb-4">Gate Pass System Login</h5>
                                         <div className="form-group">
                                             <label htmlFor="exampleInputEmail1">Email address</label>

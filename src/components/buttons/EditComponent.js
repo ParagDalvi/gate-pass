@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import firebase from '../../firebase/firebase'
-import ModalHeader from 'react-bootstrap/ModalHeader';
 
 
 const dateObj = new Date();
@@ -393,7 +392,7 @@ export default class AddNewButton extends Component {
                                             return (
                                                 <tr>
                                                     <td>
-                                                        <input class="form-control align-middle"
+                                                        <input className="form-control align-middle"
                                                             name={'id' + index} id={"id" + index}
                                                             value={product.id}
                                                             onChange={this.handleChange} type="text">
@@ -401,7 +400,7 @@ export default class AddNewButton extends Component {
                                                         <small className="text-danger">{product.idError}</small>
                                                     </td>
                                                     <td>
-                                                        <input class="form-control align-middle"
+                                                        <input className="form-control align-middle"
                                                             value={product.description}
                                                             onChange={this.handleChange}
                                                             name={"description" + index} id={"description" + index}
@@ -411,7 +410,7 @@ export default class AddNewButton extends Component {
                                                         <small className="text-danger">{product.descriptionError}</small>
                                                     </td>
                                                     <td>
-                                                        <input class="form-control align-middle"
+                                                        <input className="form-control align-middle"
                                                             value={product.returnDate}
                                                             name={"returnDate" + index} id={"returnDate" + index}
                                                             onChange={this.handleChange} value={product.returnDate.split('-').reverse().join('-')}
@@ -419,7 +418,7 @@ export default class AddNewButton extends Component {
                                                         </input>
                                                     </td>
                                                     <td>
-                                                        <input class="form-control align-middle"
+                                                        <input className="form-control align-middle"
                                                             value={product.qty}
                                                             name={"qty" + index} id={"qty" + index}
                                                             onChange={this.handleChange} value={product.qty}
@@ -436,8 +435,8 @@ export default class AddNewButton extends Component {
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <div class="form-check align-items-center align-self-center">
-                                                            <input class="form-check-input"
+                                                        <div className="form-check align-items-center align-self-center">
+                                                            <input className="form-check-input"
                                                                 value={product.status}
                                                                 disabled={product.type === 'Non-Returnable'}
                                                                 name={"status" + index}

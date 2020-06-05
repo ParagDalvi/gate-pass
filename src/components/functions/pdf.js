@@ -1,8 +1,5 @@
-import React from 'react';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import { Button } from 'react-bootstrap';
-import Logo from '../../../src/assets/images/logo-black.png'
 
 
 

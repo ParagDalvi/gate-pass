@@ -50,7 +50,7 @@ export default class Main extends Component {
 
             return (
                 <div>
-                    <Navbar />
+                    <Navbar frompage="main"/>
                     {
                         this.state.issues
                             ? <div className="container">

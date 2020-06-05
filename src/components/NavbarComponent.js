@@ -1,12 +1,21 @@
 import React from 'react';
 import logo from '../assets/images/logo.png';
+import firebase from '../../src/firebase/firebase';
 
-function Navbar() {
+function Navbar({ frompage }) {
+    function handleLogout() {
+        firebase.auth().signOut();
+    }
     return (
-        <nav className="navbar navbar-darl bg-dark">
-            <a className="navbar-brand mx-auto" href="/">
-                <img src={logo} className="d-inline-block align-top" height="25%" width="25%" ></img>
-            </a>
+        <nav class="navbar navbar-dark bg-dark">
+            <img src={logo} width="30%" height="30%" class="d-inline-block align-top" alt="log" />
+            {
+                frompage === 'main'
+                    ? <button onClick={handleLogout} type="button" className="ml-auto btn btn-outline-light">
+                        Logout
+                    </button>
+                    : null
+            }
         </nav>
     );
 }

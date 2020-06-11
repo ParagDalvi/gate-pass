@@ -55,6 +55,7 @@ export default class Main extends Component {
                             ? <div className="container">
                                 <br></br>
                                 <div className="row">
+                                    <h3><strong className="text-success">Gate Pass</strong> managemanet system</h3>
                                     <div className="ml-auto">
                                         <ExportButton issues={this.state.issues} />
                                         <AddNewButton issues={this.state.issues} />

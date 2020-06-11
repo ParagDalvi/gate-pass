@@ -43,6 +43,7 @@ export default class Login extends Component {
         return (
             <div>
                 <NavbarComponent />
+                <h3 className="center-heding mt-5"><strong className="text-success">Gate Pass</strong> management system</h3>
                 <div className="row mt-5">
                     <div className="col-md-6 offset-md-3 col-10 offset-1">
                         <form onSubmit={this.handleSubmit}>

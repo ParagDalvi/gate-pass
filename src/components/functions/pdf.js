@@ -16,7 +16,7 @@ export function createPdf(data) {
 
 
     doc.setFontSize(12);
-    doc.text('("a LogMeIn Group Company") redg. Office: Prestige Khodays Towers, No.5,\n 1st Floor, Raj Bhavan Road, Banglore - 560001, Karnataka, India',
+    doc.text('LogMeIn Systems India Pvt Ltd, No. 5, 1st Floor, Prestige Khoday Towers,\nRaj Bhavan Road, Bangalore, Karnataka - 560001',
         104,
         25,
         'center'

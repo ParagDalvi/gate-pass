@@ -1,4 +1,4 @@
-import React  from 'react';
+import React from 'react';
 import { Accordion, Card, Button } from 'react-bootstrap';
 import EditComponent from './buttons/EditComponent';
 import { createPdf } from './functions/pdf'
@@ -32,7 +32,7 @@ function SingleItem({ data }) {
     var status = true;
     for (let index = 0; index < data.products.length; index++) {
         const product = data.products[index];
-        if (!product.status) {
+        if (product.type === 'Returnable' && !product.status) {
             status = false;
             break;
         }

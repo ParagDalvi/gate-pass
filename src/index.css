@@ -20,3 +20,7 @@ code {
 .custom-table{
   overflow-x:auto;
 }
+
+.center-heding{
+  text-align: center;
+}

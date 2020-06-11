@@ -99,7 +99,11 @@ function SingleItem({ data }) {
                                                         <td>{product.returnDate}</td>
                                                         <td>{product.qty}</td>
                                                         <td>{product.type}</td>
-                                                        {product.status ? <span className="fa fa-check"></span> : <span className="fa fa-times"></span>}
+                                                        {
+                                                            product.type === "Returnable" && product.status
+                                                                ? <span className="fa fa-check"></span>
+                                                                : <span className="fa fa-times"></span>
+                                                        }
                                                     </tr>
                                                 )
                                             })}
